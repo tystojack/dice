@@ -15,23 +15,62 @@ const io = new Server(server, {
   },
 });
 
+let EmitTimer = 0;
+const sendPositionData = ()=> {
+
+}
+
+let random1;
+let random2;
+let randomrotate = [0,0,0]
+function EmitData() {
+
+  function randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)/2
+  }
+   const rotater = ()=> {
+    const ran0 = randomIntFromInterval(0, 3)
+    const ran1 = randomIntFromInterval(0, 3)
+    const ran3 = randomIntFromInterval(0, 3)
+    
+   
+    let newNumber = ran0 * Math.PI
+    let newNumber1 = ran1 * Math.PI
+    let newNumber2 = ran3 * Math.PI
+
+    console.log(ran0,ran1, "!!!!")
+    console.log(randomrotate, "random rotate")
+    
+randomrotate = [newNumber1,newNumber, newNumber2]
+
+}
+rotater();
+}
+setInterval(EmitData, 3000);
+
+setInterval(sendPositionData, 3000);
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
+socket.emit("random", randomrotate);
   socket.on("join_room", (data) => {
     socket.join(data);
   });
+  
 
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("receive_message", data);
   });
-});
- function EmitData(arg) {
-  random1= Math.random();
-  socket.to(data.room).emit("random", data);
+ 
+  // socket.emit("random", [random1,random2]);
+  const sendPosition = ()=> {
+    
 }
+// setInterval(sendPosition, 3000);
+});
 
-// setTimeout(EmitData, 1500, 'funky');
+
+
 
 server.listen(3001, () => {
   console.log("SERVER IS RUNNING");
