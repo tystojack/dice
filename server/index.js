@@ -16,9 +16,7 @@ const io = new Server(server, {
 });
 
 let EmitTimer = 0;
-const sendPositionData = ()=> {
 
-}
 
 let random1;
 let random2;
@@ -48,11 +46,16 @@ rotater();
 }
 setInterval(EmitData, 3000);
 
-setInterval(sendPositionData, 3000);
+
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
-socket.emit("random", randomrotate);
+  const sendingRandom = ()=> {
+  socket.emit("random", randomrotate);
+
+}
+setInterval(sendingRandom, 500)
+
   socket.on("join_room", (data) => {
     socket.join(data);
   });
