@@ -109,8 +109,10 @@ io.on("connection", (socket) => {
 }
 setInterval(sendingRandom, 500)
 
-  socket.on("join_room", (data) => {
-    socket.join(data);
+  socket.on("joinroom", (data) => {
+    socket.join(data.room);
+    console.log(data, "the room data")
+    io.to(data.room).emit("initialstate", roomData);
   });
   
 
