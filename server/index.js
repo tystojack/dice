@@ -23,7 +23,7 @@ let random2;
 let randomrotate = [0,0,0]
 let diceRotationData = [[0,0,0],[0,0,0]]
 let fiveDiveRotation = {}
-
+let Rooms = [{room:"1",started: false, playersTurn: 0, playerInfo:{"tyler":{rotation:[], numberOfDice:5,statement:""} } }]
 let roomData = [
   {roomid:564345, 
     state:{
@@ -91,13 +91,13 @@ const FiveDiceData = ()=> {
     Data.push(rotater())
   }
   fiveDiveRotation = Data;
-
+console.log(fiveDiveRotation, "five dive rotaton")
  
 }
 // rotater();
 // }
 // setInterval(EmitData, 3000);
-setInterval(FiveDiceData, 3000);
+// setInterval(FiveDiceData, 3000);
 
 
 io.on("connection", (socket) => {
@@ -107,11 +107,19 @@ io.on("connection", (socket) => {
   socket.emit("random", fiveDiveRotation);
 
 }
-setInterval(sendingRandom, 500)
+// setInterval(sendingRandom, 500)
 
   socket.on("joinroom", (data) => {
     socket.join(data.room);
-    console.log(data, "the room data")
+    // console.log(data, "the room data")
+    let roomDestination = Rooms.find(obj => obj.room === data.room);
+ if(roomDestination !== undefined) {
+  console.log("room exists")
+ } else {
+  console.log("room does not exist")
+  Rooms.push({room:data.room,started: false, playersTurn: 0, playerInfo:{"tyler":{rotation:[], numberOfDice:5,statement:""} } })
+ }
+ console.log(Rooms)
     io.to(data.room).emit("initialstate", roomData);
   });
   
