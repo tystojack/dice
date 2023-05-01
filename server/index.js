@@ -113,11 +113,13 @@ io.on("connection", (socket) => {
     socket.join(data.room);
     // console.log(data, "the room data")
     let roomDestination = Rooms.find(obj => obj.room === data.room);
+  
  if(roomDestination !== undefined) {
   console.log("room exists")
+roomDestination.playerInfo[data.name] = {rotation:[], numberOfDice:5,statement:""}
  } else {
   console.log("room does not exist")
-  Rooms.push({room:data.room,started: false, playersTurn: 0, playerInfo:{"tyler":{rotation:[], numberOfDice:5,statement:""} } })
+  Rooms.push({room:data.room,started: false, playersTurn: 0, playerInfo:{[data.name]:{rotation:[], numberOfDice:5,statement:""} } })
  }
  console.log(Rooms)
     io.to(data.room).emit("initialstate", roomData);
