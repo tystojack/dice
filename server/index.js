@@ -32,7 +32,7 @@ let roomData = [
 }
 }
 ]
-// function EmitData() {
+function EmitData() {
 
   function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)/2
@@ -94,8 +94,8 @@ const FiveDiceData = ()=> {
 console.log(fiveDiveRotation, "five dive rotaton")
  
 }
-// rotater();
-// }
+rotater();
+}
 // setInterval(EmitData, 3000);
 // setInterval(FiveDiceData, 3000);
 
@@ -104,10 +104,10 @@ io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
   const sendingRandom = ()=> {
-  socket.emit("random", fiveDiveRotation);
+  // socket.emit("random", fiveDiveRotation);
 
 }
-// setInterval(sendingRandom, 500)
+setInterval(sendingRandom, 500)
 
   socket.on("joinroom", (data) => {
     socket.join(data.room);
