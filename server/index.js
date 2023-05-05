@@ -15,24 +15,10 @@ const io = new Server(server, {
   },
 });
 
-let EmitTimer = 0;
-
-
-let random1;
-let random2;
-let randomrotate = [0,0,0]
-let diceRotationData = [[0,0,0],[0,0,0]]
-let fiveDiveRotation = {}
+let fiveDiceRotation = {}
 let Rooms = [{room:"1",started: false, playersTurn: 0, playerInfo:{"tyler":{rotation:[], numberOfDice:5,statement:""} } }]
-let roomData = [
-  {roomid:564345, 
-    state:{
-      player1:{roll:[0,0,0]},
-  player2:{roll:[0,0,0]}
-}
-}
-]
-function EmitData() {
+
+function EmitData(roomFilter, Name) {
 
   function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)/2
@@ -71,33 +57,42 @@ function EmitData() {
     let newNumber13 = ran13 * Math.PI
     let newNumber14 = ran14 * Math.PI
 
-    console.log(ran0,ran1, "!!!!")
+ 
     let diceObject = {dice0:[newNumber,newNumber1,newNumber2], 
       dice1:[newNumber3,newNumber4,newNumber5],
       dice2:[newNumber6,newNumber7,newNumber8],
       dice3:[newNumber9,newNumber10,newNumber11],
       dice4:[newNumber12,newNumber13,newNumber14]
     }
-   
+    
     return diceObject;
     
 // randomrotate = [newNumber,newNumber1, newNumber2]
 
 }
-rotater();
-const FiveDiceData = ()=> {
+// rotater();
+const MultiPlayers = ()=> {
   let Data = [];
   for (let i = 0; i < 4; i++) {
-    Data.push(rotater())
+    Data= rotater();
   }
-  fiveDiveRotation = Data;
-console.log(fiveDiveRotation, "five dive rotaton")
+  // fiveDiceRotation = Data;
+console.log(Data, "five dive rotaton")
+FilteredRoom = Rooms.filter(function(obj) {
+  return obj.room ===roomFilter ;
+})
+
+let privateDice = FilteredRoom[0].playerInfo[Name]
+console.log(privateDice)
  
 }
-rotater();
+MultiPlayers();
+// rotater();
+// FiveDiceData();
 }
-// setInterval(EmitData, 3000);
+setInterval(()=> EmitData("1","tyler"), 3000);
 // setInterval(FiveDiceData, 3000);
+// setInterval(MultiPlayers, 3000);
 
 
 io.on("connection", (socket) => {
@@ -122,8 +117,15 @@ roomDestination.playerInfo[data.name] = {rotation:[], numberOfDice:5,statement:"
   Rooms.push({room:data.room,started: false, playersTurn: 0, playerInfo:{[data.name]:{rotation:[], numberOfDice:5,statement:""} } })
  }
  console.log(Rooms)
-    io.to(data.room).emit("initialstate", roomData);
+FilteredRoom = Rooms.filter(function(obj) {
+  return obj.room ===data.room ;
+})
+    // io.to(data.room).emit("initialstate", FilteredRoom[0]);
   });
+  socket.on("startgame",()=> {
+    console.log("game has started")
+    io.to(data.room).emit("initialstate", FilteredRoom[0]);
+  })
   
 
   socket.on("send_message", (data) => {
