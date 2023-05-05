@@ -166,6 +166,13 @@ io.on("connection", (socket) => {
       return obj.room === data.room;
     });
     io.to(data.id).emit("gamestarted", FilteredRoom[0].playerInfo);
+    let roomObject = FilteredRoom[0].playerInfo;
+
+    for (const property in roomObject) {
+      let eachPlayerId = roomObject[property].id;
+      // console.log(`${property}: ${roomObject[property]}`);
+      io.to(eachPlayerId).emit("gamestarted", roomObject[property]);
+    }
   });
 
   socket.on("send_message", (data) => {
