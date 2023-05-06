@@ -23,7 +23,7 @@ let Rooms = [
     playersTurn: 0,
     playerInfo: {
       tyler: {
-        rotation: [],
+        rotation: {},
         numberOfDice: 5,
         diceNumberStatement: 0,
         diceAmountStatement: 0,
@@ -90,19 +90,80 @@ function EmitData(roomName) {
       Data.push(rotater())
     }
 
-    console.log(Data, "the data object")
+    console.log(Data[0], "the data object 0")
+    // console.log(Data, "thedata")
     let FilteredRoom = Rooms.filter(function (obj) {
       return obj.room === roomName;
     });
+    let roomIndex = Rooms.findIndex((obj => obj.room == roomName));
 
     let PlayerInfo = FilteredRoom[0].playerInfo;
-    for (const property in PlayerInfo) {
-      let eachPlayerId = PlayerInfo[property].id;
 
-      io.to(eachPlayerId).emit("gamestarted", PlayerInfo[property]);
-    }
+async function updateRotation() {
+  for (const property in PlayerInfo) {
+   
+    let playerRotation = PlayerInfo[property].rotation
+    console.log(playerRotation, "player rotation before")
+    let playerNumber = PlayerInfo[property].playerNumber
+    console.log(playerNumber,"playerNumber")
+
+    // playerRotation = Data[playerNumber]
+    Rooms[roomIndex].playerInfo[property].rotation = Data[playerNumber]
+    console.log(playerRotation, "player Rotation after")
+    
+
+
+  }
+
+}
+function sendRotation() {
+  for (const property in PlayerInfo) {
+    let eachPlayerId = PlayerInfo[property].id;
+ 
+
+    io.to(eachPlayerId).emit("gamestarted", PlayerInfo[property]);
+  }
+
+}
+
+
+updateRotation().then(()=> {
+sendRotation()
+}
+)
+console.log(Rooms[1].playerInfo, "rooms")
+
+
+
+
+
+
+
+
+   
+
+
+
+
+//semi working 
+    // for (const property in PlayerInfo) {
+    //   let eachPlayerId = PlayerInfo[property].id;
+    //   let playerRotation = PlayerInfo[property].rotation
+    //   console.log(playerRotation, "player rotation before")
+    //   let playerNumber = PlayerInfo[property].playerNumber
+    //   console.log(playerNumber,"playerNumber")
+
+    //   playerRotation = Data[playerNumber]
+    //   console.log(playerRotation, "player Rotation after")
+      
+
+    //   io.to(eachPlayerId).emit("gamestarted", PlayerInfo[property]);
+    // }
+
+
+
   
-    return Data
+    // return Data
 
   };
   MultiPlayers();
@@ -129,12 +190,12 @@ io.on("connection", (socket) => {
     console.log(numberOfPlayers,"number of Players")
 
       roomDestination.playerInfo[data.name] = {
-        rotation: [],
+        rotation: {},
         numberOfDice: 5,
         diceNumberStatement: 0,
         diceAmountStatement: 0,
         id: data.id,
-        PlayerNumber: numberOfPlayers,
+        playerNumber: numberOfPlayers,
        
       };
       console.log(roomDestination.playerInfo[data.name], "payload");
@@ -148,11 +209,11 @@ io.on("connection", (socket) => {
         playersTurn: 0,
         playerInfo: {
           [data.name]: {
-            rotation: [],
+            rotation: {},
             numberOfDice: 5,
             diceNumberStatement: 0,
             diceAmountStatement: 0,
-            PlayerNumber: 0,
+            playerNumber: 0,
             id: data.id,
           },
         },
