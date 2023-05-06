@@ -33,7 +33,7 @@ let Rooms = [
   },
 ];
 
-function EmitData(roomFilter, Name) {
+function EmitData(roomName) {
   function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min) / 2;
@@ -81,58 +81,61 @@ function EmitData(roomFilter, Name) {
 
     return diceObject;
 
-    // randomrotate = [newNumber,newNumber1, newNumber2]
+
   };
-  // rotater();
+  
   const MultiPlayers = () => {
     let Data = [];
     for (let i = 0; i < 4; i++) {
-      Data = rotater();
+      Data.push(rotater())
     }
-    // fiveDiceRotation = Data;
 
+    console.log(Data, "the data object")
     let FilteredRoom = Rooms.filter(function (obj) {
-      return obj.room === roomFilter;
+      return obj.room === roomName;
     });
 
-    let privateDice = FilteredRoom[0].playerInfo[Name];
-    console.log(privateDice);
+    let PlayerInfo = FilteredRoom[0].playerInfo;
+    for (const property in PlayerInfo) {
+      let eachPlayerId = PlayerInfo[property].id;
+
+      io.to(eachPlayerId).emit("gamestarted", PlayerInfo[property]);
+    }
+  
+    return Data
+
   };
   MultiPlayers();
-  // rotater();
-  // FiveDiceData();
+ 
 }
 
-//working on the sending players the right data
-// setInterval(()=> EmitData("1","tyler"), 3000);
 
-// setInterval(FiveDiceData, 3000);
-// setInterval(MultiPlayers, 3000);
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
-
-  const sendingRandom = () => {
-    // socket.emit("random", fiveDiveRotation);
-  };
-  setInterval(sendingRandom, 500);
 
   socket.on("joinroom", (data) => {
     socket.join(data.room, "the room");
     let FilteredRoom = Rooms.filter(function (obj) {
       return obj.room === data.room;
     });
-    // console.log(data, "the room data")
+
     let roomDestination = Rooms.find((obj) => obj.room === data.room);
     console.log(data.id, "the socket.id");
     if (roomDestination !== undefined) {
       console.log("room exists");
+
+    let   numberOfPlayers = Object.keys(roomDestination.playerInfo).length
+    console.log(numberOfPlayers,"number of Players")
+
       roomDestination.playerInfo[data.name] = {
         rotation: [],
         numberOfDice: 5,
         diceNumberStatement: 0,
         diceAmountStatement: 0,
         id: data.id,
+        PlayerNumber: numberOfPlayers,
+       
       };
       console.log(roomDestination.playerInfo[data.name], "payload");
 
@@ -149,6 +152,7 @@ io.on("connection", (socket) => {
             numberOfDice: 5,
             diceNumberStatement: 0,
             diceAmountStatement: 0,
+            PlayerNumber: 0,
             id: data.id,
           },
         },
@@ -162,26 +166,19 @@ io.on("connection", (socket) => {
   });
   socket.on("startgame", (data) => {
     console.log("game has started");
-    let FilteredRoom = Rooms.filter(function (obj) {
-      return obj.room === data.room;
-    });
-    io.to(data.id).emit("gamestarted", FilteredRoom[0].playerInfo);
-    let roomObject = FilteredRoom[0].playerInfo;
+  
+   EmitData(data.room)
 
-    for (const property in roomObject) {
-      let eachPlayerId = roomObject[property].id;
-      // console.log(`${property}: ${roomObject[property]}`);
-      io.to(eachPlayerId).emit("gamestarted", roomObject[property]);
-    }
+  
   });
 
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("receive_message", data);
   });
 
-  // socket.emit("random", [random1,random2]);
+
   const sendPosition = () => {};
-  // setInterval(sendPosition, 3000);
+
 });
 
 server.listen(3001, () => {
