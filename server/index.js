@@ -71,13 +71,225 @@ function EmitData(roomName) {
     let newNumber13 = ran13 * Math.PI;
     let newNumber14 = ran14 * Math.PI;
 
-    let diceObject = {
-      dice0: [newNumber, newNumber1, newNumber2],
-      dice1: [newNumber3, newNumber4, newNumber5],
-      dice2: [newNumber6, newNumber7, newNumber8],
-      dice3: [newNumber9, newNumber10, newNumber11],
-      dice4: [newNumber12, newNumber13, newNumber14],
-    };
+  
+const NumberChecker = (x,y,z)=> {
+
+
+  let TopNumber = 2;
+  let frontNumber = 3;
+  // let x = "0";
+  if (x === 0 && y === 0 && z === 0) {
+    TopNumber = 2;
+    frontNumber = 3;
+    console.log(TopNumber, "topnumber");
+  } else if (x === 0 && y === 0 && z === 0.5) {
+    TopNumber = 6;
+    frontNumber = 3;
+  } else if (x === 0 && y === 0 && z === 1) {
+    TopNumber = 4;
+    frontNumber = 3;
+  } else if (x === 0 && y === 0 && z === 1.5) {
+    TopNumber = 5;
+    frontNumber = 3;
+  } else if (x === 0 && y === 0.5 && z === 0) {
+    TopNumber = 2;
+    frontNumber = 5;
+  } else if (x === 0 && y === 1 && z === 0) {
+    TopNumber = 2;
+    frontNumber = 1;
+  } else if (x === 0 && y === 1.5 && z === 0) {
+    TopNumber = 2;
+    frontNumber = 6;
+  } else if (x === 0 && y === 1.5 && z === 0.5) {
+    TopNumber = 6;
+    frontNumber = 4;
+  } else if (x === 0 && y === 1.5 && z === 1) {
+    TopNumber = 4;
+    frontNumber = 5;
+  } else if (x === 0 && y === 1.5 && z === 1.5) {
+    TopNumber = 5;
+    frontNumber = 2;
+  } else if (x === 0 && y === 0.5 && z === 0.5) {
+    TopNumber = 6;
+    frontNumber = 2;
+  } else if (x === 0 && y === 0.5 && z === 1) {
+    TopNumber = 4;
+    frontNumber = 6;
+  } else if (x === 0 && y === 0.5 && z === 1.5) {
+    TopNumber = 5;
+    frontNumber = 4;
+  } else if (x === 0 && y === 1 && z === 1.5) {
+    TopNumber = 5;
+    frontNumber = 1;
+  } else if (x === 0 && y === 1 && z === 1) {
+    TopNumber = 4;
+    frontNumber = 1;
+  } else if (x === 0 && y === 1 && z === 0.5) {
+    TopNumber = 6;
+    frontNumber = 1;
+  } else if (x === 0 && y === 0.5 && z === 0) {
+    TopNumber = 6;
+    frontNumber = 1;
+  } else if (x === 0.5 && y === 0 && z === 0) {
+    TopNumber = 1;
+    frontNumber = 2;
+  } else if (x === 0.5 && y === 0 && z === 0.5) {
+    TopNumber = 1;
+    frontNumber = 6;
+  } else if (x === 0.5 && y === 0 && z === 1) {
+    TopNumber = 1;
+    frontNumber = 4;
+  } else if (x === 0.5 && y === 0 && z === 1.5) {
+    TopNumber = 1;
+    frontNumber = 5;
+  } else if (x === 0.5 && y === 0.5 && z === 0) {
+    TopNumber = 6;
+    frontNumber = 2;
+  } else if (x === 0.5 && y === 0.5 && z === 1) {
+    TopNumber = 5;
+    frontNumber = 4;
+  } else if (x === 0.5 && y === 0.5 && z === 1.5) {
+    TopNumber = 2;
+    frontNumber = 5;
+  } else if (x === 0.5 && y === 1 && z === 1.5) {
+    TopNumber = 3;
+    frontNumber = 5;
+  } else if (x === 0.5 && y === 1 && z === 1) {
+    TopNumber = 3;
+    frontNumber = 4;
+  } else if (x === 0.5 && y === 0.5 && z === 0.5) {
+    TopNumber = 4;
+    frontNumber = 6;
+  } else if (x === 0.5 && y === 1.5 && z === 0) {
+    TopNumber = 5;
+    frontNumber = 2;
+  } else if (x === 0.5 && y === 1.5 && z === 0.5) {
+    TopNumber = 2;
+    frontNumber = 6;
+  } else if (x === 0.5 && y === 1.5 && z === 1) {
+    TopNumber = 6;
+    frontNumber = 4;
+  } else if (x === 0.5 && y === 1.5 && z === 1.5) {
+    TopNumber = 4;
+    frontNumber = 5;
+  } else if (x === 1 && y === 0 && z === 0) {
+    TopNumber = 4;
+    frontNumber = 1;
+  } else if (x === 1 && y === 0 && z === 0.5) {
+    TopNumber = 5;
+    frontNumber = 1;
+  } else if (x === 1 && y === 0 && z === 1) {
+    TopNumber = 2;
+    frontNumber = 1;
+  } else if (x === 1 && y === 0 && z === 1.5) {
+    TopNumber = 6;
+    frontNumber = 1;
+  } else if (x === 1 && y === 0.5 && z === 0) {
+    TopNumber = 4;
+    frontNumber = 6;
+  } else if (x === 1 && y === 0.5 && z === 0.5) {
+    TopNumber = 5;
+    frontNumber = 4;
+  } else if (x === 1 && y === 0.5 && z === 1) {
+    TopNumber = 2;
+    frontNumber = 5;
+  } else if (x === 1 && y === 0.5 && z === 1) {
+    TopNumber = 2;
+    frontNumber = 5;
+  } else if (x === 1 && y === 0.5 && z === 1.5) {
+    TopNumber = 6;
+    frontNumber = 2;
+  } else if (x === 1 && y === 0.5 && z === 1.5) {
+    TopNumber = 6;
+    frontNumber = 2;
+  } else if (x === 1 && y === 1 && z === 0) {
+    TopNumber = 4;
+    frontNumber = 3;
+  } else if (x === 1 && y === 1 && z === 0.5) {
+    TopNumber = 5;
+    frontNumber = 3;
+  } else if (x === 1 && y === 1 && z === 1) {
+    TopNumber = 2;
+    frontNumber = 3;
+  } else if (x === 1 && y === 1 && z === 1.5) {
+    TopNumber = 5;
+    frontNumber = 3;
+  } else if (x === 1 && y === 1.5 && z === 0) {
+    TopNumber = 4;
+    frontNumber = 5;
+  } else if (x === 1 && y === 1.5 && z === 0.5) {
+    TopNumber = 5;
+    frontNumber = 2;
+  } else if (x === 1 && y === 1.5 && z === 1) {
+    TopNumber = 2;
+    frontNumber = 6;
+  } else if (x === 1 && y === 1.5 && z === 1.5) {
+    TopNumber = 6;
+    frontNumber = 4;
+  } else if (x === 1.5 && y === 0 && z === 0) {
+    TopNumber = 3;
+    frontNumber = 4;
+  } else if (x === 1.5 && y === 0 && z === 0.5) {
+    TopNumber = 3;
+    frontNumber = 5;
+  } else if (x === 1.5 && y === 0 && z === 1) {
+    TopNumber = 3;
+    frontNumber = 2;
+  } else if (x === 1.5 && y === 0 && z === 1.5) {
+    TopNumber = 3;
+    frontNumber = 6;
+  } else if (x === 1.5 && y === 0.5 && z === 0) {
+    TopNumber = 5;
+    frontNumber = 4;
+  } else if (x === 1.5 && y === 0.5 && z === 0.5) {
+    TopNumber = 2;
+    frontNumber = 5;
+  } else if (x === 1.5 && y === 0.5 && z === 1) {
+    TopNumber = 6;
+    frontNumber = 2;
+  } else if (x === 1.5 && y === 0.5 && z === 1.5) {
+    TopNumber = 4;
+    frontNumber = 6;
+  } else if (x === 1.5 && y === 1 && z === 0) {
+    TopNumber = 1;
+    frontNumber = 4;
+  } else if (x === 1.5 && y === 1 && z === 0.5) {
+    TopNumber = 1;
+    frontNumber = 5;
+  } else if (x === 1.5 && y === 1 && z === 1) {
+    TopNumber = 1;
+    frontNumber = 2;
+  } else if (x === 1.5 && y === 1 && z === 1.5) {
+    TopNumber = 1;
+    frontNumber = 6;
+  } else if (x === 1.5 && y === 1.5 && z === 0) {
+    TopNumber = 6;
+    frontNumber = 4;
+  } else if (x === 1.5 && y === 1.5 && z === 0.5) {
+    TopNumber = 4;
+    frontNumber = 5;
+  } else if (x === 1.5 && y === 1.5 && z === 1) {
+    TopNumber = 5;
+    frontNumber = 2;
+  } else if (x === 1.5 && y === 1.5 && z === 1.5) {
+    TopNumber = 2;
+    frontNumber = 8;
+  }
+
+
+
+  return [frontNumber,TopNumber]
+}
+let diceObject = {
+  dice0: [newNumber, newNumber1, newNumber2],
+  dice1: [newNumber3, newNumber4, newNumber5],
+  dice2: [newNumber6, newNumber7, newNumber8],
+  dice3: [newNumber9, newNumber10, newNumber11],
+  dice4: [newNumber12, newNumber13, newNumber14],
+  Numbers: NumberChecker(ran0,ran1, ran2),
+  ran: [ran0,ran1,ran2]
+};
+
 
     return diceObject;
 
@@ -103,9 +315,9 @@ async function updateRotation() {
   for (const property in PlayerInfo) {
    
     let playerRotation = PlayerInfo[property].rotation
-    console.log(playerRotation, "player rotation before")
+   
     let playerNumber = PlayerInfo[property].playerNumber
-    console.log(playerNumber,"playerNumber")
+   console.log(PlayerInfo[property].rotation.Numbers, "@@@playerinfo")
 
     // playerRotation = Data[playerNumber]
     Rooms[roomIndex].playerInfo[property].rotation = Data[playerNumber]
