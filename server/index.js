@@ -15,29 +15,31 @@ const io = new Server(server, {
   },
 });
 
-let fiveDiceRotation = {};
-let Rooms = [
-  {
-    room: "1",
-    started: false,
-    playersTurn: 0,
-    playerInfo: {
-      tyler: {
-        rotation: {},
-        numberOfDice: 5,
-        diceNumberStatement: 0,
-        diceAmountStatement: 0,
-        id: "data.id",
-      },
-    },
-  },
-];
+// example room
+// {
+//   room: "1",
+//   started: false,
+//   playersTurn: 0,
+//   playerInfo: {
+//     tyler: {
+//       rotation: {},
+//       numberOfDice: 5,
+//       diceNumberStatement: 0,
+//       diceAmountStatement: 0,
+//       id: "data.id",
+//     },
+//   },
+// },
+
+let Rooms = [];
 
 function EmitData(roomName) {
+  //number generator
   function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min) / 2;
   }
+
   const rotater = () => {
     const ran0 = randomIntFromInterval(0, 3);
     const ran1 = randomIntFromInterval(0, 3);
@@ -71,318 +73,300 @@ function EmitData(roomName) {
     let newNumber13 = ran13 * Math.PI;
     let newNumber14 = ran14 * Math.PI;
 
-  
-const NumberChecker = (x,y,z)=> {
+    const NumberChecker = (x, y, z) => {
+      let TopNumber = 2;
+      let frontNumber = 3;
+      // let x = "0";
+      if (x === 0 && y === 0 && z === 0) {
+        TopNumber = 2;
+        frontNumber = 3;
+        console.log(TopNumber, "topnumber");
+      } else if (x === 0 && y === 0 && z === 0.5) {
+        TopNumber = 6;
+        frontNumber = 3;
+      } else if (x === 0 && y === 0 && z === 1) {
+        TopNumber = 4;
+        frontNumber = 3;
+      } else if (x === 0 && y === 0 && z === 1.5) {
+        TopNumber = 5;
+        frontNumber = 3;
+      } else if (x === 0 && y === 0.5 && z === 0) {
+        TopNumber = 2;
+        frontNumber = 5;
+      } else if (x === 0 && y === 1 && z === 0) {
+        TopNumber = 2;
+        frontNumber = 1;
+      } else if (x === 0 && y === 1.5 && z === 0) {
+        TopNumber = 2;
+        frontNumber = 6;
+      } else if (x === 0 && y === 1.5 && z === 0.5) {
+        TopNumber = 6;
+        frontNumber = 4;
+      } else if (x === 0 && y === 1.5 && z === 1) {
+        TopNumber = 4;
+        frontNumber = 5;
+      } else if (x === 0 && y === 1.5 && z === 1.5) {
+        TopNumber = 5;
+        frontNumber = 2;
+      } else if (x === 0 && y === 0.5 && z === 0.5) {
+        TopNumber = 6;
+        frontNumber = 2;
+      } else if (x === 0 && y === 0.5 && z === 1) {
+        TopNumber = 4;
+        frontNumber = 6;
+      } else if (x === 0 && y === 0.5 && z === 1.5) {
+        TopNumber = 5;
+        frontNumber = 4;
+      } else if (x === 0 && y === 1 && z === 1.5) {
+        TopNumber = 5;
+        frontNumber = 1;
+      } else if (x === 0 && y === 1 && z === 1) {
+        TopNumber = 4;
+        frontNumber = 1;
+      } else if (x === 0 && y === 1 && z === 0.5) {
+        TopNumber = 6;
+        frontNumber = 1;
+      } else if (x === 0 && y === 0.5 && z === 0) {
+        TopNumber = 6;
+        frontNumber = 1;
+      } else if (x === 0.5 && y === 0 && z === 0) {
+        TopNumber = 1;
+        frontNumber = 2;
+      } else if (x === 0.5 && y === 0 && z === 0.5) {
+        TopNumber = 1;
+        frontNumber = 6;
+      } else if (x === 0.5 && y === 0 && z === 1) {
+        TopNumber = 1;
+        frontNumber = 4;
+      } else if (x === 0.5 && y === 0 && z === 1.5) {
+        TopNumber = 1;
+        frontNumber = 5;
+      } else if (x === 0.5 && y === 0.5 && z === 0) {
+        TopNumber = 6;
+        frontNumber = 2;
+      } else if (x === 0.5 && y === 0.5 && z === 1) {
+        TopNumber = 5;
+        frontNumber = 4;
+      } else if (x === 0.5 && y === 0.5 && z === 1.5) {
+        TopNumber = 2;
+        frontNumber = 5;
+      } else if (x === 0.5 && y === 1 && z === 1.5) {
+        TopNumber = 3;
+        frontNumber = 5;
+      } else if (x === 0.5 && y === 1 && z === 1) {
+        TopNumber = 3;
+        frontNumber = 4;
+      } else if (x === 0.5 && y === 0.5 && z === 0.5) {
+        TopNumber = 4;
+        frontNumber = 6;
+      } else if (x === 0.5 && y === 1.5 && z === 0) {
+        TopNumber = 5;
+        frontNumber = 2;
+      } else if (x === 0.5 && y === 1.5 && z === 0.5) {
+        TopNumber = 2;
+        frontNumber = 6;
+      } else if (x === 0.5 && y === 1.5 && z === 1) {
+        TopNumber = 6;
+        frontNumber = 4;
+      } else if (x === 0.5 && y === 1.5 && z === 1.5) {
+        TopNumber = 4;
+        frontNumber = 5;
+      } else if (x === 1 && y === 0 && z === 0) {
+        TopNumber = 4;
+        frontNumber = 1;
+      } else if (x === 1 && y === 0 && z === 0.5) {
+        TopNumber = 5;
+        frontNumber = 1;
+      } else if (x === 1 && y === 0 && z === 1) {
+        TopNumber = 2;
+        frontNumber = 1;
+      } else if (x === 1 && y === 0 && z === 1.5) {
+        TopNumber = 6;
+        frontNumber = 1;
+      } else if (x === 1 && y === 0.5 && z === 0) {
+        TopNumber = 4;
+        frontNumber = 6;
+      } else if (x === 1 && y === 0.5 && z === 0.5) {
+        TopNumber = 5;
+        frontNumber = 4;
+      } else if (x === 1 && y === 0.5 && z === 1) {
+        TopNumber = 2;
+        frontNumber = 5;
+      } else if (x === 1 && y === 0.5 && z === 1) {
+        TopNumber = 2;
+        frontNumber = 5;
+      } else if (x === 1 && y === 0.5 && z === 1.5) {
+        TopNumber = 6;
+        frontNumber = 2;
+      } else if (x === 1 && y === 0.5 && z === 1.5) {
+        TopNumber = 6;
+        frontNumber = 2;
+      } else if (x === 1 && y === 1 && z === 0) {
+        TopNumber = 4;
+        frontNumber = 3;
+      } else if (x === 1 && y === 1 && z === 0.5) {
+        TopNumber = 5;
+        frontNumber = 3;
+      } else if (x === 1 && y === 1 && z === 1) {
+        TopNumber = 2;
+        frontNumber = 3;
+      } else if (x === 1 && y === 1 && z === 1.5) {
+        TopNumber = 5;
+        frontNumber = 3;
+      } else if (x === 1 && y === 1.5 && z === 0) {
+        TopNumber = 4;
+        frontNumber = 5;
+      } else if (x === 1 && y === 1.5 && z === 0.5) {
+        TopNumber = 5;
+        frontNumber = 2;
+      } else if (x === 1 && y === 1.5 && z === 1) {
+        TopNumber = 2;
+        frontNumber = 6;
+      } else if (x === 1 && y === 1.5 && z === 1.5) {
+        TopNumber = 6;
+        frontNumber = 4;
+      } else if (x === 1.5 && y === 0 && z === 0) {
+        TopNumber = 3;
+        frontNumber = 4;
+      } else if (x === 1.5 && y === 0 && z === 0.5) {
+        TopNumber = 3;
+        frontNumber = 5;
+      } else if (x === 1.5 && y === 0 && z === 1) {
+        TopNumber = 3;
+        frontNumber = 2;
+      } else if (x === 1.5 && y === 0 && z === 1.5) {
+        TopNumber = 3;
+        frontNumber = 6;
+      } else if (x === 1.5 && y === 0.5 && z === 0) {
+        TopNumber = 5;
+        frontNumber = 4;
+      } else if (x === 1.5 && y === 0.5 && z === 0.5) {
+        TopNumber = 2;
+        frontNumber = 5;
+      } else if (x === 1.5 && y === 0.5 && z === 1) {
+        TopNumber = 6;
+        frontNumber = 2;
+      } else if (x === 1.5 && y === 0.5 && z === 1.5) {
+        TopNumber = 4;
+        frontNumber = 6;
+      } else if (x === 1.5 && y === 1 && z === 0) {
+        TopNumber = 1;
+        frontNumber = 4;
+      } else if (x === 1.5 && y === 1 && z === 0.5) {
+        TopNumber = 1;
+        frontNumber = 5;
+      } else if (x === 1.5 && y === 1 && z === 1) {
+        TopNumber = 1;
+        frontNumber = 2;
+      } else if (x === 1.5 && y === 1 && z === 1.5) {
+        TopNumber = 1;
+        frontNumber = 6;
+      } else if (x === 1.5 && y === 1.5 && z === 0) {
+        TopNumber = 6;
+        frontNumber = 4;
+      } else if (x === 1.5 && y === 1.5 && z === 0.5) {
+        TopNumber = 4;
+        frontNumber = 5;
+      } else if (x === 1.5 && y === 1.5 && z === 1) {
+        TopNumber = 5;
+        frontNumber = 2;
+      } else if (x === 1.5 && y === 1.5 && z === 1.5) {
+        TopNumber = 2;
+        frontNumber = 8;
+      }
 
-
-  let TopNumber = 2;
-  let frontNumber = 3;
-  // let x = "0";
-  if (x === 0 && y === 0 && z === 0) {
-    TopNumber = 2;
-    frontNumber = 3;
-    console.log(TopNumber, "topnumber");
-  } else if (x === 0 && y === 0 && z === 0.5) {
-    TopNumber = 6;
-    frontNumber = 3;
-  } else if (x === 0 && y === 0 && z === 1) {
-    TopNumber = 4;
-    frontNumber = 3;
-  } else if (x === 0 && y === 0 && z === 1.5) {
-    TopNumber = 5;
-    frontNumber = 3;
-  } else if (x === 0 && y === 0.5 && z === 0) {
-    TopNumber = 2;
-    frontNumber = 5;
-  } else if (x === 0 && y === 1 && z === 0) {
-    TopNumber = 2;
-    frontNumber = 1;
-  } else if (x === 0 && y === 1.5 && z === 0) {
-    TopNumber = 2;
-    frontNumber = 6;
-  } else if (x === 0 && y === 1.5 && z === 0.5) {
-    TopNumber = 6;
-    frontNumber = 4;
-  } else if (x === 0 && y === 1.5 && z === 1) {
-    TopNumber = 4;
-    frontNumber = 5;
-  } else if (x === 0 && y === 1.5 && z === 1.5) {
-    TopNumber = 5;
-    frontNumber = 2;
-  } else if (x === 0 && y === 0.5 && z === 0.5) {
-    TopNumber = 6;
-    frontNumber = 2;
-  } else if (x === 0 && y === 0.5 && z === 1) {
-    TopNumber = 4;
-    frontNumber = 6;
-  } else if (x === 0 && y === 0.5 && z === 1.5) {
-    TopNumber = 5;
-    frontNumber = 4;
-  } else if (x === 0 && y === 1 && z === 1.5) {
-    TopNumber = 5;
-    frontNumber = 1;
-  } else if (x === 0 && y === 1 && z === 1) {
-    TopNumber = 4;
-    frontNumber = 1;
-  } else if (x === 0 && y === 1 && z === 0.5) {
-    TopNumber = 6;
-    frontNumber = 1;
-  } else if (x === 0 && y === 0.5 && z === 0) {
-    TopNumber = 6;
-    frontNumber = 1;
-  } else if (x === 0.5 && y === 0 && z === 0) {
-    TopNumber = 1;
-    frontNumber = 2;
-  } else if (x === 0.5 && y === 0 && z === 0.5) {
-    TopNumber = 1;
-    frontNumber = 6;
-  } else if (x === 0.5 && y === 0 && z === 1) {
-    TopNumber = 1;
-    frontNumber = 4;
-  } else if (x === 0.5 && y === 0 && z === 1.5) {
-    TopNumber = 1;
-    frontNumber = 5;
-  } else if (x === 0.5 && y === 0.5 && z === 0) {
-    TopNumber = 6;
-    frontNumber = 2;
-  } else if (x === 0.5 && y === 0.5 && z === 1) {
-    TopNumber = 5;
-    frontNumber = 4;
-  } else if (x === 0.5 && y === 0.5 && z === 1.5) {
-    TopNumber = 2;
-    frontNumber = 5;
-  } else if (x === 0.5 && y === 1 && z === 1.5) {
-    TopNumber = 3;
-    frontNumber = 5;
-  } else if (x === 0.5 && y === 1 && z === 1) {
-    TopNumber = 3;
-    frontNumber = 4;
-  } else if (x === 0.5 && y === 0.5 && z === 0.5) {
-    TopNumber = 4;
-    frontNumber = 6;
-  } else if (x === 0.5 && y === 1.5 && z === 0) {
-    TopNumber = 5;
-    frontNumber = 2;
-  } else if (x === 0.5 && y === 1.5 && z === 0.5) {
-    TopNumber = 2;
-    frontNumber = 6;
-  } else if (x === 0.5 && y === 1.5 && z === 1) {
-    TopNumber = 6;
-    frontNumber = 4;
-  } else if (x === 0.5 && y === 1.5 && z === 1.5) {
-    TopNumber = 4;
-    frontNumber = 5;
-  } else if (x === 1 && y === 0 && z === 0) {
-    TopNumber = 4;
-    frontNumber = 1;
-  } else if (x === 1 && y === 0 && z === 0.5) {
-    TopNumber = 5;
-    frontNumber = 1;
-  } else if (x === 1 && y === 0 && z === 1) {
-    TopNumber = 2;
-    frontNumber = 1;
-  } else if (x === 1 && y === 0 && z === 1.5) {
-    TopNumber = 6;
-    frontNumber = 1;
-  } else if (x === 1 && y === 0.5 && z === 0) {
-    TopNumber = 4;
-    frontNumber = 6;
-  } else if (x === 1 && y === 0.5 && z === 0.5) {
-    TopNumber = 5;
-    frontNumber = 4;
-  } else if (x === 1 && y === 0.5 && z === 1) {
-    TopNumber = 2;
-    frontNumber = 5;
-  } else if (x === 1 && y === 0.5 && z === 1) {
-    TopNumber = 2;
-    frontNumber = 5;
-  } else if (x === 1 && y === 0.5 && z === 1.5) {
-    TopNumber = 6;
-    frontNumber = 2;
-  } else if (x === 1 && y === 0.5 && z === 1.5) {
-    TopNumber = 6;
-    frontNumber = 2;
-  } else if (x === 1 && y === 1 && z === 0) {
-    TopNumber = 4;
-    frontNumber = 3;
-  } else if (x === 1 && y === 1 && z === 0.5) {
-    TopNumber = 5;
-    frontNumber = 3;
-  } else if (x === 1 && y === 1 && z === 1) {
-    TopNumber = 2;
-    frontNumber = 3;
-  } else if (x === 1 && y === 1 && z === 1.5) {
-    TopNumber = 5;
-    frontNumber = 3;
-  } else if (x === 1 && y === 1.5 && z === 0) {
-    TopNumber = 4;
-    frontNumber = 5;
-  } else if (x === 1 && y === 1.5 && z === 0.5) {
-    TopNumber = 5;
-    frontNumber = 2;
-  } else if (x === 1 && y === 1.5 && z === 1) {
-    TopNumber = 2;
-    frontNumber = 6;
-  } else if (x === 1 && y === 1.5 && z === 1.5) {
-    TopNumber = 6;
-    frontNumber = 4;
-  } else if (x === 1.5 && y === 0 && z === 0) {
-    TopNumber = 3;
-    frontNumber = 4;
-  } else if (x === 1.5 && y === 0 && z === 0.5) {
-    TopNumber = 3;
-    frontNumber = 5;
-  } else if (x === 1.5 && y === 0 && z === 1) {
-    TopNumber = 3;
-    frontNumber = 2;
-  } else if (x === 1.5 && y === 0 && z === 1.5) {
-    TopNumber = 3;
-    frontNumber = 6;
-  } else if (x === 1.5 && y === 0.5 && z === 0) {
-    TopNumber = 5;
-    frontNumber = 4;
-  } else if (x === 1.5 && y === 0.5 && z === 0.5) {
-    TopNumber = 2;
-    frontNumber = 5;
-  } else if (x === 1.5 && y === 0.5 && z === 1) {
-    TopNumber = 6;
-    frontNumber = 2;
-  } else if (x === 1.5 && y === 0.5 && z === 1.5) {
-    TopNumber = 4;
-    frontNumber = 6;
-  } else if (x === 1.5 && y === 1 && z === 0) {
-    TopNumber = 1;
-    frontNumber = 4;
-  } else if (x === 1.5 && y === 1 && z === 0.5) {
-    TopNumber = 1;
-    frontNumber = 5;
-  } else if (x === 1.5 && y === 1 && z === 1) {
-    TopNumber = 1;
-    frontNumber = 2;
-  } else if (x === 1.5 && y === 1 && z === 1.5) {
-    TopNumber = 1;
-    frontNumber = 6;
-  } else if (x === 1.5 && y === 1.5 && z === 0) {
-    TopNumber = 6;
-    frontNumber = 4;
-  } else if (x === 1.5 && y === 1.5 && z === 0.5) {
-    TopNumber = 4;
-    frontNumber = 5;
-  } else if (x === 1.5 && y === 1.5 && z === 1) {
-    TopNumber = 5;
-    frontNumber = 2;
-  } else if (x === 1.5 && y === 1.5 && z === 1.5) {
-    TopNumber = 2;
-    frontNumber = 8;
-  }
-
-
-
-  return [frontNumber,TopNumber]
-}
-let diceObject = {
-  dice0: [newNumber, newNumber1, newNumber2],
-  dice1: [newNumber3, newNumber4, newNumber5],
-  dice2: [newNumber6, newNumber7, newNumber8],
-  dice3: [newNumber9, newNumber10, newNumber11],
-  dice4: [newNumber12, newNumber13, newNumber14],
-  Numbers: NumberChecker(ran0,ran1, ran2),
-  ran: [ran0,ran1,ran2]
-};
-
+      return [frontNumber, TopNumber];
+    };
+    let Dice0Number = NumberChecker(ran0, ran1, ran2);
+    let Dice1Number = NumberChecker(ran3, ran4, ran5);
+    let Dice2Number = NumberChecker(ran6, ran7, ran8);
+    let Dice3Number = NumberChecker(ran9, ran10, ran11);
+    let Dice4Number = NumberChecker(ran12, ran13, ran14);
+    let diceObject = {
+      dice0: [newNumber, newNumber1, newNumber2],
+      dice1: [newNumber3, newNumber4, newNumber5],
+      dice2: [newNumber6, newNumber7, newNumber8],
+      dice3: [newNumber9, newNumber10, newNumber11],
+      dice4: [newNumber12, newNumber13, newNumber14],
+      // Numbers: NumberChecker(ran0, ran1, ran2),
+      Numbers: [
+        Dice0Number,
+        Dice1Number,
+        Dice2Number,
+        Dice3Number,
+        Dice4Number,
+      ],
+      ran: [ran0, ran1, ran2],
+    };
 
     return diceObject;
-
-
   };
-  
+
   const MultiPlayers = () => {
     let Data = [];
     for (let i = 0; i < 4; i++) {
-      Data.push(rotater())
+      Data.push(rotater());
     }
+    const key = "Numbers";
+    const DiceValues = Data.map((obj) => {
+      if (obj.hasOwnProperty(key)) {
+        return obj[key];
+      }
+    });
 
-    console.log(Data[0], "the data object 0")
+    let flatDice = DiceValues.flat(1);
+    const allnumbers = flatDice.map(function (x) {
+      return x[0];
+    });
+    console.log(allnumbers, "all numbers");
+    let numberOf1 = allnumbers.filter((x) => x === 1).length;
+    let numberOf2 = allnumbers.filter((x) => x === 2).length;
+    let numberOf3 = allnumbers.filter((x) => x === 3).length;
+    let numberOf4 = allnumbers.filter((x) => x === 4).length;
+    let numberOf5 = allnumbers.filter((x) => x === 5).length;
+    let numberOf6 = allnumbers.filter((x) => x === 6).length;
+    console.log(numberOf1, "number of 1");
+    console.log(numberOf2, "number of 2");
+    console.log(numberOf3, "number of 3");
+    console.log(numberOf4, "number of 4");
+    console.log(numberOf5, "number of 5");
+    console.log(numberOf6, "number of 6");
+
     // console.log(Data, "thedata")
     let FilteredRoom = Rooms.filter(function (obj) {
       return obj.room === roomName;
     });
-    let roomIndex = Rooms.findIndex((obj => obj.room == roomName));
+    let roomIndex = Rooms.findIndex((obj) => obj.room == roomName);
 
     let PlayerInfo = FilteredRoom[0].playerInfo;
 
-async function updateRotation() {
-  for (const property in PlayerInfo) {
-   
-    let playerRotation = PlayerInfo[property].rotation
-   
-    let playerNumber = PlayerInfo[property].playerNumber
-   console.log(PlayerInfo[property].rotation.Numbers, "@@@playerinfo")
+    async function updateRotation() {
+      for (const property in PlayerInfo) {
+        let playerRotation = PlayerInfo[property].rotation;
+        let FrontNumber = PlayerInfo[property].rotation.Numbers;
 
-    // playerRotation = Data[playerNumber]
-    Rooms[roomIndex].playerInfo[property].rotation = Data[playerNumber]
-    console.log(playerRotation, "player Rotation after")
-    
+        let playerNumber = PlayerInfo[property].playerNumber;
+        // console.log(PlayerInfo[property].rotation.Numbers, "@@@playerinfo");
 
+        // playerRotation = Data[playerNumber]
+        Rooms[roomIndex].playerInfo[property].rotation = Data[playerNumber];
+        // console.log(playerRotation, "player Rotation after");
+      }
+    }
+    function sendRotation() {
+      for (const property in PlayerInfo) {
+        let eachPlayerId = PlayerInfo[property].id;
 
-  }
+        io.to(eachPlayerId).emit("gamestarted", PlayerInfo[property]);
+      }
+    }
 
-}
-function sendRotation() {
-  for (const property in PlayerInfo) {
-    let eachPlayerId = PlayerInfo[property].id;
- 
-
-    io.to(eachPlayerId).emit("gamestarted", PlayerInfo[property]);
-  }
-
-}
-
-
-updateRotation().then(()=> {
-sendRotation()
-}
-)
-console.log(Rooms[1].playerInfo, "rooms")
-
-
-
-
-
-
-
-
-   
-
-
-
-
-//semi working 
-    // for (const property in PlayerInfo) {
-    //   let eachPlayerId = PlayerInfo[property].id;
-    //   let playerRotation = PlayerInfo[property].rotation
-    //   console.log(playerRotation, "player rotation before")
-    //   let playerNumber = PlayerInfo[property].playerNumber
-    //   console.log(playerNumber,"playerNumber")
-
-    //   playerRotation = Data[playerNumber]
-    //   console.log(playerRotation, "player Rotation after")
-      
-
-    //   io.to(eachPlayerId).emit("gamestarted", PlayerInfo[property]);
-    // }
-
-
-
-  
-    // return Data
-
+    updateRotation().then(() => {
+      sendRotation();
+    });
   };
   MultiPlayers();
- 
 }
-
-
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
@@ -398,8 +382,7 @@ io.on("connection", (socket) => {
     if (roomDestination !== undefined) {
       console.log("room exists");
 
-    let   numberOfPlayers = Object.keys(roomDestination.playerInfo).length
-    console.log(numberOfPlayers,"number of Players")
+      let numberOfPlayers = Object.keys(roomDestination.playerInfo).length;
 
       roomDestination.playerInfo[data.name] = {
         rotation: {},
@@ -408,9 +391,8 @@ io.on("connection", (socket) => {
         diceAmountStatement: 0,
         id: data.id,
         playerNumber: numberOfPlayers,
-       
       };
-      console.log(roomDestination.playerInfo[data.name], "payload");
+      // console.log(roomDestination.playerInfo[data.name], "payload");
 
       io.to(data.room).emit("initialstate", FilteredRoom[0]);
     } else {
@@ -432,26 +414,22 @@ io.on("connection", (socket) => {
       });
       io.to(data.room).emit("initialstate", FilteredRoom[0]);
     }
-    console.log(Rooms);
+    // console.log(Rooms);
     FilteredRoom = Rooms.filter(function (obj) {
       return obj.room === data.room;
     });
   });
   socket.on("startgame", (data) => {
     console.log("game has started");
-  
-   EmitData(data.room)
 
-  
+    EmitData(data.room);
   });
 
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("receive_message", data);
   });
 
-
   const sendPosition = () => {};
-
 });
 
 server.listen(3001, () => {
