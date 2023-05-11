@@ -325,18 +325,25 @@ function EmitData(roomName) {
     let numberOf4 = allnumbers.filter((x) => x === 4).length;
     let numberOf5 = allnumbers.filter((x) => x === 5).length;
     let numberOf6 = allnumbers.filter((x) => x === 6).length;
-    console.log(numberOf1, "number of 1");
-    console.log(numberOf2, "number of 2");
-    console.log(numberOf3, "number of 3");
-    console.log(numberOf4, "number of 4");
-    console.log(numberOf5, "number of 5");
-    console.log(numberOf6, "number of 6");
+
+    const numberState = {
+      one: numberOf1,
+      two: numberOf2,
+      three: numberOf3,
+      four: numberOf4,
+      five: numberOf5,
+      six: numberOf6,
+    };
+    console.log(numberState, "number state");
 
     // console.log(Data, "thedata")
     let FilteredRoom = Rooms.filter(function (obj) {
       return obj.room === roomName;
     });
     let roomIndex = Rooms.findIndex((obj) => obj.room == roomName);
+
+    console.log(Rooms[roomIndex], "my room ");
+    Rooms[roomIndex].numberState = numberState;
 
     let PlayerInfo = FilteredRoom[0].playerInfo;
 
@@ -399,6 +406,7 @@ io.on("connection", (socket) => {
       console.log("room does not exist");
       Rooms.push({
         room: data.room,
+        numberState: {},
         started: false,
         playersTurn: 0,
         playerInfo: {
