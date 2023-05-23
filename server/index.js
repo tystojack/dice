@@ -409,6 +409,8 @@ io.on("connection", (socket) => {
         numberState: {},
         started: false,
         playersTurn: 0,
+        number: null,
+        value: null,
         playerInfo: {
           [data.name]: {
             rotation: {},
@@ -432,6 +434,25 @@ io.on("connection", (socket) => {
 
     EmitData(data.room);
   });
+const updateStatement = (room, number, value)=> {
+  let FilteredRoom = Rooms.filter(function (obj) {
+    return obj.room === room;
+  });
+  console.log(FilteredRoom, "the filtered Room")
+  let roomIndex = Rooms.findIndex((obj) => obj.room == room);
+let TargetRoom = Rooms[roomIndex]
+  console.log(Rooms[roomIndex], "my room ");
+const new_obj = {...TargetRoom, number:number, value:value}
+console.log(new_obj, "the new object ")
+
+  
+}
+
+  socket.on("sendstatement", (data)=> {
+// console.log(data, "data")
+updateStatement(data.room, data.number,data.value)
+// console.log(Rooms[0].playerInfo, "the rooms")
+  })
 
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("receive_message", data);
