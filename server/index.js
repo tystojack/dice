@@ -15,31 +15,17 @@ const io = new Server(server, {
   },
 });
 
-// example room
-// {
-//   room: "1",
-//   started: false,
-//   playersTurn: 0,
-//   playerInfo: {
-//     tyler: {
-//       rotation: {},
-//       numberOfDice: 5,
-//       diceNumberStatement: 0,
-//       diceAmountStatement: 0,
-//       id: "data.id",
-//     },
-//   },
-// },
-
+// Master Data
 let Rooms = [];
 
-function EmitData(roomName) {
+// Rolling Multiple Dice
+function EmitData(roomName, name) {
   //number generator
   function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min) / 2;
   }
-
+  // generates Random Values
   const rotater = () => {
     const ran0 = randomIntFromInterval(0, 3);
     const ran1 = randomIntFromInterval(0, 3);
@@ -318,7 +304,7 @@ function EmitData(roomName) {
     const allnumbers = flatDice.map(function (x) {
       return x[0];
     });
-    console.log(allnumbers, "all numbers");
+
     let numberOf1 = allnumbers.filter((x) => x === 1).length;
     let numberOf2 = allnumbers.filter((x) => x === 2).length;
     let numberOf3 = allnumbers.filter((x) => x === 3).length;
@@ -334,37 +320,48 @@ function EmitData(roomName) {
       five: numberOf5,
       six: numberOf6,
     };
-    console.log(numberState, "number state");
 
-    // console.log(Data, "thedata")
     let FilteredRoom = Rooms.filter(function (obj) {
       return obj.room === roomName;
     });
-    let roomIndex = Rooms.findIndex((obj) => obj.room == roomName);
 
-    console.log(Rooms[roomIndex], "my room ");
-    Rooms[roomIndex].numberState = numberState;
+    FilteredRoom[0].numberState = numberState;
 
     let PlayerInfo = FilteredRoom[0].playerInfo;
 
     async function updateRotation() {
+      const updatedUsers = Rooms.map((e) =>
+        e.room === roomName ? { ...e, playersTurn: name } : Rooms
+      );
+      Rooms = updatedUsers;
+
       for (const property in PlayerInfo) {
-        let playerRotation = PlayerInfo[property].rotation;
-        let FrontNumber = PlayerInfo[property].rotation.Numbers;
+        // let playerRotation = PlayerInfo[property].rotation;
+        // let FrontNumber = PlayerInfo[property].rotation.Numbers;
 
         let playerNumber = PlayerInfo[property].playerNumber;
-        // console.log(PlayerInfo[property].rotation.Numbers, "@@@playerinfo");
 
-        // playerRotation = Data[playerNumber]
-        Rooms[roomIndex].playerInfo[property].rotation = Data[playerNumber];
-        // console.log(playerRotation, "player Rotation after");
+        FilteredRoom[0].playerInfo[property].rotation = Data[playerNumber];
       }
     }
     function sendRotation() {
+      const firstPlayer = Rooms.map((e) => {
+        if (e.room === roomName) {
+          return e.playersTurn;
+        }
+      });
+      console.log(firstPlayer, "first player");
       for (const property in PlayerInfo) {
         let eachPlayerId = PlayerInfo[property].id;
+        const playerData = PlayerInfo[property];
 
-        io.to(eachPlayerId).emit("gamestarted", PlayerInfo[property]);
+        // working deposit
+        // io.to(eachPlayerId).emit("gamestarted", PlayerInfo[property]);
+
+        io.to(eachPlayerId).emit("gamestarted", {
+          playerData: playerData,
+          fistPlayer: firstPlayer,
+        });
       }
     }
 
@@ -373,6 +370,28 @@ function EmitData(roomName) {
     });
   };
   MultiPlayers();
+  const updatePlayerStart = () => {
+    const firstPlayerUpdate = Rooms.map((e) =>
+      e.room === roomName ? { ...e, playersTurn: name } : Rooms
+    );
+    Rooms = firstPlayerUpdate;
+    let FilteredRoom = Rooms.filter(function (obj) {
+      return obj.room === roomName;
+    });
+    console.log(FilteredRoom[0].playersTurn, "players turn");
+    io.to(roomName).emit("playerup", FilteredRoom.playersTurn);
+
+    // let FilteredRoom = Rooms.filter(function (obj) {
+    //   return obj.room === room;
+    // });
+    // console.log(FilteredRoom, "the filtered Room");
+    // let roomIndex = Rooms.findIndex((obj) => obj.room == room);
+    // let TargetRoom = Rooms[roomIndex];
+
+    // const new_obj = { ...TargetRoom, number: number, value: value };
+    // console.log(new_obj, "new object");
+  };
+  // updatePlayerStart();
 }
 
 io.on("connection", (socket) => {
@@ -432,31 +451,29 @@ io.on("connection", (socket) => {
   socket.on("startgame", (data) => {
     console.log("game has started");
 
-    EmitData(data.room);
+    EmitData(data.room, data.name);
   });
-const updateStatement = (room, number, value)=> {
-  let FilteredRoom = Rooms.filter(function (obj) {
-    return obj.room === room;
+  const updateStatement = (room, number, value) => {
+    const updatedUsers = Rooms.map((e) =>
+      e.room === room ? { ...e, number: number, value: value } : Rooms
+    );
+    Rooms = updatedStatement;
+    console.log(updatedUsers, "updated users");
+    let packet = { number: number, value: value };
+    io.to(room).emit("updatestatement", packet);
+  };
+
+  socket.on("sendstatement", (data) => {
+    // console.log(data, "data");
+    updateStatement(data.room, data.number, data.value);
+    // let packet = { number: data.number, value: data.value };
+    // io.to(data.room).emit("updatestatement", packet);
+    // console.log(Rooms[0].playerInfo, "the rooms")
   });
-  console.log(FilteredRoom, "the filtered Room")
-  let roomIndex = Rooms.findIndex((obj) => obj.room == room);
-let TargetRoom = Rooms[roomIndex]
-  console.log(Rooms[roomIndex], "my room ");
-const new_obj = {...TargetRoom, number:number, value:value}
-console.log(new_obj, "the new object ")
 
-  
-}
-
-  socket.on("sendstatement", (data)=> {
-// console.log(data, "data")
-updateStatement(data.room, data.number,data.value)
-// console.log(Rooms[0].playerInfo, "the rooms")
-  })
-
-  socket.on("send_message", (data) => {
-    socket.to(data.room).emit("receive_message", data);
-  });
+  // socket.on("send_message", (data) => {
+  //   socket.to(data.room).emit("receive_message", data);
+  // });
 
   const sendPosition = () => {};
 });
