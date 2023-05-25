@@ -345,12 +345,12 @@ function EmitData(roomName, name) {
       }
     }
     function sendRotation() {
-      const firstPlayer = Rooms.map((e) => {
+      const playerList = Rooms.map((e) => {
         if (e.room === roomName) {
-          return e.playersTurn;
+          return e.roomList;
         }
       });
-      console.log(firstPlayer, "first player");
+      console.log(playerList, "first player");
       for (const property in PlayerInfo) {
         let eachPlayerId = PlayerInfo[property].id;
         const playerData = PlayerInfo[property];
@@ -360,7 +360,7 @@ function EmitData(roomName, name) {
 
         io.to(eachPlayerId).emit("gamestarted", {
           playerData: playerData,
-          fistPlayer: firstPlayer,
+          playerList:playerList ,
         });
       }
     }
@@ -399,17 +399,19 @@ io.on("connection", (socket) => {
 
   socket.on("joinroom", (data) => {
     socket.join(data.room, "the room");
-    let FilteredRoom = Rooms.filter(function (obj) {
-      return obj.room === data.room;
-    });
+ 
 
     let roomDestination = Rooms.find((obj) => obj.room === data.room);
     console.log(data.id, "the socket.id");
     if (roomDestination !== undefined) {
       console.log("room exists");
-
       let numberOfPlayers = Object.keys(roomDestination.playerInfo).length;
+   let player =   Object.keys(roomDestination.roomList).length;
+   let playerNumber = player +1;
 
+   roomDestination.roomList[data.name] = playerNumber
+   console.log(playerNumber, "playernumber")
+// roomDestination.roomList.push(data.name);
       roomDestination.playerInfo[data.name] = {
         rotation: {},
         numberOfDice: 5,
@@ -419,10 +421,14 @@ io.on("connection", (socket) => {
         playerNumber: numberOfPlayers,
       };
       // console.log(roomDestination.playerInfo[data.name], "payload");
-
-      io.to(data.room).emit("initialstate", FilteredRoom[0]);
+      console.log(Rooms, "room destingation")
+      let result = Rooms.find(obj => {
+        return obj.room === data.room
+      })
+      io.to(data.room).emit("initialstate", result.roomList);
     } else {
       console.log("room does not exist");
+      
       Rooms.push({
         room: data.room,
         numberState: {},
@@ -430,6 +436,7 @@ io.on("connection", (socket) => {
         playersTurn: 0,
         number: null,
         value: null,
+        roomList: {[data.name]:1},
         playerInfo: {
           [data.name]: {
             rotation: {},
@@ -439,9 +446,14 @@ io.on("connection", (socket) => {
             playerNumber: 0,
             id: data.id,
           },
+         
         },
       });
-      io.to(data.room).emit("initialstate", FilteredRoom[0]);
+      let result = Rooms.find(obj => {
+        return obj.room === data.room
+      })
+      console.log(result, "%%%")
+      io.to(data.room).emit("initialstate", result.roomList);
     }
     // console.log(Rooms);
     FilteredRoom = Rooms.filter(function (obj) {
