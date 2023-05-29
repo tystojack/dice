@@ -361,6 +361,7 @@ function EmitData(roomName, name) {
         io.to(eachPlayerId).emit("gamestarted", {
           playerData: playerData,
           playerList:playerList ,
+          gameStarted: true,
         });
       }
     }
