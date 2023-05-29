@@ -17,7 +17,7 @@ const io = new Server(server, {
 
 // Master Data
 let Rooms = [];
-
+console.log(Rooms, "rooms ")
 // Rolling Multiple Dice
 function EmitData(roomName, name) {
   //number generator
@@ -350,7 +350,16 @@ function EmitData(roomName, name) {
           return e.roomList;
         }
       });
+      let thePlayerList = playerList[0]
+    
+   function getObjectKey(obj, value) {
+  return Object.keys(obj).find((key) => obj[key] === value);
+}
+
+const key = getObjectKey(thePlayerList, 1);
+console.log(key); // user2
       console.log(playerList, "first player");
+      
       for (const property in PlayerInfo) {
         let eachPlayerId = PlayerInfo[property].id;
         const playerData = PlayerInfo[property];
@@ -362,6 +371,8 @@ function EmitData(roomName, name) {
           playerData: playerData,
           playerList:playerList ,
           gameStarted: true,
+          PlayerUp: key
+         
         });
       }
     }
@@ -382,15 +393,7 @@ function EmitData(roomName, name) {
     console.log(FilteredRoom[0].playersTurn, "players turn");
     io.to(roomName).emit("playerup", FilteredRoom.playersTurn);
 
-    // let FilteredRoom = Rooms.filter(function (obj) {
-    //   return obj.room === room;
-    // });
-    // console.log(FilteredRoom, "the filtered Room");
-    // let roomIndex = Rooms.findIndex((obj) => obj.room == room);
-    // let TargetRoom = Rooms[roomIndex];
 
-    // const new_obj = { ...TargetRoom, number: number, value: value };
-    // console.log(new_obj, "new object");
   };
   // updatePlayerStart();
 }
@@ -403,7 +406,7 @@ io.on("connection", (socket) => {
  
 
     let roomDestination = Rooms.find((obj) => obj.room === data.room);
-    console.log(data.id, "the socket.id");
+    
     if (roomDestination !== undefined) {
       console.log("room exists");
       let numberOfPlayers = Object.keys(roomDestination.playerInfo).length;
@@ -411,7 +414,7 @@ io.on("connection", (socket) => {
    let playerNumber = player +1;
 
    roomDestination.roomList[data.name] = playerNumber
-   console.log(playerNumber, "playernumber")
+  
 // roomDestination.roomList.push(data.name);
       roomDestination.playerInfo[data.name] = {
         rotation: {},
@@ -421,8 +424,7 @@ io.on("connection", (socket) => {
         id: data.id,
         playerNumber: numberOfPlayers,
       };
-      // console.log(roomDestination.playerInfo[data.name], "payload");
-      console.log(Rooms, "room destingation")
+
       let result = Rooms.find(obj => {
         return obj.room === data.room
       })
@@ -453,10 +455,10 @@ io.on("connection", (socket) => {
       let result = Rooms.find(obj => {
         return obj.room === data.room
       })
-      console.log(result, "%%%")
+
       io.to(data.room).emit("initialstate", result.roomList);
     }
-    // console.log(Rooms);
+  
     FilteredRoom = Rooms.filter(function (obj) {
       return obj.room === data.room;
     });
@@ -471,22 +473,18 @@ io.on("connection", (socket) => {
       e.room === room ? { ...e, number: number, value: value } : Rooms
     );
     Rooms = updatedStatement;
-    console.log(updatedUsers, "updated users");
+   
     let packet = { number: number, value: value };
     io.to(room).emit("updatestatement", packet);
   };
 
   socket.on("sendstatement", (data) => {
-    // console.log(data, "data");
+ 
     updateStatement(data.room, data.number, data.value);
-    // let packet = { number: data.number, value: data.value };
-    // io.to(data.room).emit("updatestatement", packet);
-    // console.log(Rooms[0].playerInfo, "the rooms")
+
   });
 
-  // socket.on("send_message", (data) => {
-  //   socket.to(data.room).emit("receive_message", data);
-  // });
+
 
   const sendPosition = () => {};
 });
