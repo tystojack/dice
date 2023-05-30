@@ -382,20 +382,7 @@ console.log(key); // user2
     });
   };
   MultiPlayers();
-  const updatePlayerStart = () => {
-    const firstPlayerUpdate = Rooms.map((e) =>
-      e.room === roomName ? { ...e, playersTurn: name } : Rooms
-    );
-    Rooms = firstPlayerUpdate;
-    let FilteredRoom = Rooms.filter(function (obj) {
-      return obj.room === roomName;
-    });
-    console.log(FilteredRoom[0].playersTurn, "players turn");
-    io.to(roomName).emit("playerup", FilteredRoom.playersTurn);
 
-
-  };
-  // updatePlayerStart();
 }
 
 io.on("connection", (socket) => {
