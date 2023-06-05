@@ -330,22 +330,55 @@ function EmitData(roomName, name) {
     };
 
     const dataPacket = { dat: Data, numberState: numberState };
-    let roomListArray = Rooms.map((e) => {
-      if (e.room === roomName) {
-        return e.roomList;
-      }
-    });
-    let roomList = roomListArray[0];
-    let playerInfoArray = Rooms.map((e, i) => {
-      if (e.room === roomName) {
-        return e.playerInfo;
-      }
-    });
-    let playerInfo = playerInfoArray[0];
-    console.log(playerInfo, "the player info");
+  
+    // let playerInfoArray = Rooms.find((e, i) => {
+    //   if (e.room === roomName) {
+    //     return e.playerInfo;
+    //   }
+    // });
+ 
+    // let playerInfo = playerInfoArray;
+
+    const currentRoom = Rooms.find(Item=> Item.room ===roomName)
+    const nameList = currentRoom.nameList
+    const playerInfo = currentRoom.playerInfo
+ console.log(currentRoom, "current room")
+ newObject = {}
+ const updateObject = ()=> {
+     for(i = 0; i < nameList.length; i ++) {
+    newObject[nameList[i]] = Data[i]
+       }
+
+ }
+ updateObject();
+ console.log(newObject, "what does this say")
+// let newRotations = Rooms.map((e, i)=> {
+//   let newObject = {};
+//   if(e.room === roomName) {
+//    for(i = 0; i < e.nameList.length; i ++) {
+// newObject[e.nameList[i]] = Data[i]
+//    }
+
+//   }
+//   return newObject
+// })
+
+// console.log(newRotations, "New rotations")
+
+console.log(playerInfo, "playerInfo before ")
     for (const property in playerInfo) {
-      console.log(`${playerInfo[property].numberOfDice} ahhhh `);
+      playerInfo[property].numberOfDice = 3
+      playerInfo[property].rotation = newObject[property]
+    
+      // let packet = {}
+      // let numberOfDice = playerInfo[property].numberOfDice
+      // let rotation = Data[0]
+      // packet.rotation = rotation
+      // packet.numberOfDice = numberOfDice
+  // console.log(packet, "the packet")
+      
     }
+    console.log(playerInfo, "playerInfo after ")
 
     let new_updated_data = Rooms.map((e) => {
       if (e.room === roomName) {
@@ -365,7 +398,7 @@ function EmitData(roomName, name) {
 }
 
 // Rolling Multiple Dice
-// function EmertData(roomName, name) {
+// function EmitData(roomName, name) {
 //   //number generator
 //   function randomIntFromInterval(min, max) {
 //     // min and max included
@@ -670,10 +703,10 @@ function EmitData(roomName, name) {
 //     let FilteredRoom = Rooms.find(function (obj) {
 //       return obj.room === roomName;
 //     });
+// console.log(FilteredRoom, "The filtered Room")
+//     FilteredRoom.numberState = numberState;
 
-//     FilteredRoom[0].numberState = numberState;
-
-//     let PlayerInfo = FilteredRoom[0].playerInfo;
+//     let PlayerInfo = FilteredRoom.playerInfo;
 
 //     async function updateRotation() {
 //       const updatedUsers = Rooms.map((e) =>
@@ -687,7 +720,7 @@ function EmitData(roomName, name) {
 
 //         let playerNumber = PlayerInfo[property].playerNumber;
 
-//         FilteredRoom[0].playerInfo[property].rotation = Data[playerNumber];
+//         FilteredRoom.playerInfo[property].rotation = Data[playerNumber];
 //       }
 //     }
 //     function sendRotation() {
@@ -696,12 +729,12 @@ function EmitData(roomName, name) {
 //           return e.roomList;
 //         }
 //       });
-//       let thePlayerList = playerList[0];
+//       let thePlayerList = playerList;
 
 //       function getObjectKey(obj, value) {
 //         return Object.keys(obj).find((key) => obj[key] === value);
 //       }
-//       let TargetRoom = FilteredRoom[0].playerUp;
+//       let TargetRoom = FilteredRoom.playerUp;
 
 //       let NewPlayerUp = TargetRoom + 1;
 
@@ -729,15 +762,15 @@ function EmitData(roomName, name) {
 //       sendRotation();
 //     });
 //   };
-//   // MultiPlayers();
+//   MultiPlayers();
 // }
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
   socket.on("startgame", (data) => {
     
-    // EmitData(data.room, data.name);
-    console.log("startgame ran");
+    EmitData(data.room, data.name);
+console.log(Rooms[0].playerInfo, "the rooms")
   });
 
   socket.on("joinroom", (data) => {
@@ -752,6 +785,7 @@ io.on("connection", (socket) => {
       let playerNumber = player + 1;
 
       roomDestination.roomList[data.name] = playerNumber;
+      roomDestination.nameList.push(data.name)
 
       // roomDestination.roomList.push(data.name);
       roomDestination.playerInfo[data.name] = {
@@ -779,6 +813,7 @@ io.on("connection", (socket) => {
         number: null,
         value: null,
         playerUp: 0,
+        nameList:[data.name],
         roomList: { [data.name]: 1 },
         playerInfo: {
           [data.name]: {
