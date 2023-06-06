@@ -367,8 +367,9 @@ function EmitData(roomName, name) {
 
 console.log(playerInfo, "playerInfo before ")
     for (const property in playerInfo) {
-      playerInfo[property].numberOfDice = 3
+      let eachPlayerId = playerInfo[property].id;
       playerInfo[property].rotation = newObject[property]
+              io.to(eachPlayerId).emit("gamestarted", playerInfo[property]);
     
       // let packet = {}
       // let numberOfDice = playerInfo[property].numberOfDice
