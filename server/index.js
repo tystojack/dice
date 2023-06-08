@@ -429,9 +429,16 @@ io.on("connection", (socket) => {
     const currentRoom = Rooms.find((Item) => Item.room === data.room);
     currentRoom.number = data.number;
     currentRoom.value = data.value;
-    console.log(currentRoom, "$$$$$");
+    currentRoom.playerUp 
+    function getKeyByValue(object, value) {
+      return Object.keys(object).find((key) => object[key] === value);
+    }
+   let playerUpNumber = currentRoom.roomList[currentRoom.playerUp]
+   let newPlayerNumber = playerUpNumber + 1
 
-    const packet = { number: currentRoom.number, value: currentRoom.value };
+   const newPlayer =getKeyByValue(currentRoom.roomList,newPlayerNumber)
+currentRoom.playerUp = newPlayer;
+    const packet = { number: currentRoom.number, value: currentRoom.value, name:data.name, playerUp:newPlayer };
     io.to(data.room).emit("updateStatement", packet);
   });
   socket.on("joinroom", (data) => {
